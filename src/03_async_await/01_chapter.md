@@ -5,12 +5,19 @@ This chapter will discuss `async`/`.await` in
 greater detail, explaining how it works and how `async` code differs from
 traditional Rust programs.
 
+ในบทแรกเรากล่าวถึงภาพรวมของ async/.await ในบทนี้จะมาลงรายละเอียดมากขึ้น อธิบายวิธีการทำงาน async ที่แตกต่างกับ sync
+
 `async`/`.await` are special pieces of Rust syntax that make it possible to
 yield control of the current thread rather than blocking, allowing other
 code to make progress while waiting on an operation to complete.
 
+async/.await เป็นส่วนสำคัญ syntag ในการควบคุมการทำงานของเทรด จะอนุญาตให้โปรแกรมทำงานแบบขนาน ไม่ถูกบล็อก
+
+
 There are two main ways to use `async`: `async fn` and `async` blocks.
 Each returns a value that implements the `Future` trait:
+
+ มีสองวิธีในการใช้คือ `async`: `async fn` และ `async` แต่ละอันจะรีเทรินค่าเป็น `Future`
 
 ```rust,edition2018,ignore
 {{#include ../../examples/03_01_async_await/src/lib.rs:async_fn_and_block_examples}}
@@ -23,11 +30,16 @@ to run it to completion. If the `Future` is blocked, it will yield control
 of the current thread. When more progress can be made, the `Future` will be picked
 up by the executor and will resume running, allowing the `.await` to resolve.
 
+async จะไม่ทำงานอัตโนมัติ มันต้องถูกกระตุ้นด้วย `Future` ซึ่งมีคำสั่งคือ `.await` เมื่อ await ถูกเรียกมันจะพยามทำงานให้สำเร็จ ถ้า Future ถูกบล็อค เทรดปัจจุบันจะเข้ามาควบคุมมัน และเมื่อมีความเปลี่ยนแปลง Future จะถูกเรียกโดยระบบแล้วกลับมาทำงานอีกครั้ง 
+    
+    😵😵😵😵
 ## `async` Lifetimes
 
 Unlike traditional functions, `async fn`s which take references or other
 non-`'static` arguments return a `Future` which is bounded by the lifetime of
 the arguments:
+
+`async fn` มีอายุเท่ากับอาร์กิวเมนต์ที่เรียกใช้งาน
 
 ```rust,edition2018,ignore
 {{#include ../../examples/03_01_async_await/src/lib.rs:lifetimes_expanded}}
